@@ -2,6 +2,8 @@
 
 > Profesjonalna strona internetowa restauracji z autentyczną kuchnią kaukaską w Kartuzach.
 
+**⚠️ Uwaga:** To jest projekt demo/portfolio. Dane kontaktowe restauracji są publiczne i udostępnione za zgodą właścicieli w celach prezentacyjnych.
+
 [![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://www.python.org/)
 [![Flask](https://img.shields.io/badge/Flask-2.3.3-green.svg)](https://flask.palletsprojects.com/)
 [![React](https://img.shields.io/badge/React-18-61dafb.svg)](https://reactjs.org/)
