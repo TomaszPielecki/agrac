@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- SEO Meta Tags -->
+    <title>O Nas - Restauracja Aragac Kartuzy | Historia i Tradycja</title>
+    <meta
+      name="description"
+      content="Poznaj historię restauracji Aragac w Kartuzach ✓ Autentyczna kuchnia ormiańsko-gruzińska ✓ Nazwa od wulkanu Aragac ✓ Tradycyjne receptury ☎ 501 839 411"
+    />
+    <meta
+      name="keywords"
+      content="o nas Aragac, restauracja ormiańska Kartuzy, historia Aragac, kuchnia kaukaska, wulkan Aragac, tradycyjne receptury"
+    />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://aragac.pl/o-nas" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="O Nas - Restauracja Aragac Kartuzy" />
+    <meta
+      property="og:description"
+      content="Poznaj historię i tradycję restauracji Aragac. Autentyczna kuchnia ormiańsko-gruzińska w sercu Kartuz."
+    />
+    <meta property="og:url" content="https://aragac.pl/o-nas" />
+    <meta
+      property="og:image"
+      content="https://aragac.pl/static/assets/images/banner.jpg"
+    />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="O Nas - Restauracja Aragac Kartuzy" />
+    <meta
+      name="twitter:description"
+      content="Poznaj historię restauracji Aragac. Autentyczna kuchnia kaukaska."
+    />
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Custom CSS -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='assets/css/main.css') }}"
+    />
+
+    <!-- Tailwind Config -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "warm-beige": "#F5F5DC",
+              "warm-brown": "#8B7355",
+              "pastel-orange": "#E6B17A",
+              golden: "#D4A574",
+              "soft-white": "#FEFEFE",
+            },
+            fontFamily: {
+              display: ["Playfair Display", "serif"],
+              body: ["Inter", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="font-body bg-soft-white">
+    <!-- Header -->
+    <header class="bg-soft-white shadow-warm sticky top-0 z-50">
+      <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <!-- Logo -->
+          <div class="flex-shrink-0">
+            <a href="/">
+              <img
+                src="{{ url_for('static', filename='assets/images/logo.jpg') }}"
+                alt="Aragac"
+                class="h-12 w-auto rounded-lg"
+              />
+            </a>
+          </div>
+
+          <!-- Back Button -->
+          <div>
+            <a
+              href="/"
+              class="text-warm-brown hover:text-pastel-orange transition-colors px-4 py-2 rounded-md font-medium inline-flex items-center"
+            >
+              <i class="fas fa-arrow-left mr-2"></i>
+              Powrót
+            </a>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="py-12">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Title -->
+        <div class="text-center mb-12 fade-in">
+          <h1
+            class="text-4xl md:text-5xl font-display font-bold text-warm-brown mb-4"
+          >
+            O Restauracji Aragac
+          </h1>
+          <div
+            class="w-24 h-1 bg-gradient-to-r from-pastel-orange to-golden mx-auto"
+          ></div>
+        </div>
+
+        <!-- Hero Image -->
+        <div class="max-w-4xl mx-auto mb-12">
+          <img
+            src="{{ url_for('static', filename='assets/images/banner.jpg') }}"
+            alt="Aragac Restaurant"
+            class="w-full h-auto rounded-2xl shadow-warm"
+          />
+        </div>
+
+        <!-- Story Section -->
+        <div class="max-w-4xl mx-auto space-y-8">
+          <!-- Intro -->
+          <div class="bg-white rounded-xl shadow-warm p-8">
+            <h2
+              class="text-2xl md:text-3xl font-display font-bold text-warm-brown mb-4"
+            >
+              <i class="fas fa-heart text-pastel-orange mr-3"></i>
+              Witamy w świecie smaków Kaukazu
+            </h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-4">
+              Aragac to wyjątkowe miejsce w Kartuzach, gdzie tradycyjna kuchnia
+              ormiańsko-gruzińska spotyka się z nowoczesną obsługą i ciepłą
+              atmosferą. Nazwa naszej restauracji pochodzi od majestatycznego
+              wulkanu Aragac w Armenii - najwyższego szczytu tego pięknego
+              kraju.
+            </p>
+            <p class="text-lg text-gray-700 leading-relaxed">
+              Zapraszamy do odkrycia bogatych smaków Kaukazu, przygotowywanych
+              według tradycyjnych receptur, z użyciem najlepszych składników i z
+              poszanowaniem wielowiekowych tradycji kulinarnych.
+            </p>
+          </div>
+
+          <!-- Features Grid -->
+          <div class="grid md:grid-cols-2 gap-6">
+            <!-- Feature 1 -->
+            <div
+              class="bg-gradient-to-br from-warm-beige to-soft-white rounded-xl shadow-warm p-6"
+            >
+              <div class="text-pastel-orange text-4xl mb-4">
+                <i class="fas fa-fire"></i>
+              </div>
+              <h3 class="text-xl font-semibold text-warm-brown mb-3">
+                Dania prosto z ognia
+              </h3>
+              <p class="text-gray-700">
+                Nasze specjały grillowane na tradycyjnym węglu drzewnym, który
+                nadaje mięsu niepowtarzalny smak i aromat. Khorovats, kebaby i
+                szaszłyki przygotowywane według oryginalnych receptur.
+              </p>
+            </div>
+
+            <!-- Feature 2 -->
+            <div
+              class="bg-gradient-to-br from-warm-beige to-soft-white rounded-xl shadow-warm p-6"
+            >
+              <div class="text-pastel-orange text-4xl mb-4">
+                <i class="fas fa-bread-slice"></i>
+              </div>
+              <h3 class="text-xl font-semibold text-warm-brown mb-3">
+                Świeże wypieki
+              </h3>
+              <p class="text-gray-700">
+                Codziennie świeży lavash, aromatyczne chaczapuri i lahmadżo –
+                tradycyjne pieczywo pieczone według sprawdzonych receptur, które
+                idealnie komponuje się z naszymi daniami głównymi.
+              </p>
+            </div>
+
+            <!-- Feature 3 -->
+            <div
+              class="bg-gradient-to-br from-warm-beige to-soft-white rounded-xl shadow-warm p-6"
+            >
+              <div class="text-pastel-orange text-4xl mb-4">
+                <i class="fas fa-utensils"></i>
+              </div>
+              <h3 class="text-xl font-semibold text-warm-brown mb-3">
+                Tradycyjne specjały
+              </h3>
+              <p class="text-gray-700">
+                Khinkali - soczyste gruzińskie pierożki, tolma w liściach
+                winorośli, aromatyczne zupy i wiele innych dań, które przeniosą
+                Cię w kulinarne rejony Kaukazu.
+              </p>
+            </div>
+
+            <!-- Feature 4 -->
+            <div
+              class="bg-gradient-to-br from-warm-beige to-soft-white rounded-xl shadow-warm p-6"
+            >
+              <div class="text-pastel-orange text-4xl mb-4">
+                <i class="fas fa-glass-cheers"></i>
+              </div>
+              <h3 class="text-xl font-semibold text-warm-brown mb-3">
+                Domowe lemoniady
+              </h3>
+              <p class="text-gray-700">
+                Orzeźwiające lemoniady w unikalnych smakach: feijoa, estragon,
+                wanilia i więcej. Każda przygotowywana ze świeżych składników,
+                bez sztucznych dodatków.
+              </p>
+            </div>
+          </div>
+
+          <!-- Location & Contact -->
+          <div class="bg-white rounded-xl shadow-warm p-8">
+            <h2
+              class="text-2xl md:text-3xl font-display font-bold text-warm-brown mb-6 text-center"
+            >
+              <i class="fas fa-map-marker-alt text-pastel-orange mr-3"></i>
+              Znajdź nas w Kartuzach
+            </h2>
+
+            <div class="grid md:grid-cols-2 gap-8">
+              <div class="space-y-4">
+                <div class="flex items-start">
+                  <i
+                    class="fas fa-map-marker-alt text-pastel-orange text-xl mr-4 mt-1"
+                  ></i>
+                  <div>
+                    <h4 class="font-semibold text-warm-brown mb-1">Adres</h4>
+                    <p class="text-gray-700">
+                      ul. Kościuszki 27<br />83-300 Kartuzy
+                    </p>
+                  </div>
+                </div>
+
+                <div class="flex items-start">
+                  <i
+                    class="fas fa-clock text-pastel-orange text-xl mr-4 mt-1"
+                  ></i>
+                  <div>
+                    <h4 class="font-semibold text-warm-brown mb-1">
+                      Godziny otwarcia
+                    </h4>
+                    <p class="text-gray-700">Codziennie: 10:00 - 21:00</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="space-y-4">
+                <div class="flex items-start">
+                  <i
+                    class="fas fa-phone text-pastel-orange text-xl mr-4 mt-1"
+                  ></i>
+                  <div>
+                    <h4 class="font-semibold text-warm-brown mb-1">Telefon</h4>
+                    <a
+                      href="tel:+48501839411"
+                      class="text-pastel-orange hover:text-golden transition-colors"
+                    >
+                      501 839 411
+                    </a>
+                  </div>
+                </div>
+
+                <div class="flex items-start">
+                  <i
+                    class="fas fa-envelope text-pastel-orange text-xl mr-4 mt-1"
+                  ></i>
+                  <div>
+                    <h4 class="font-semibold text-warm-brown mb-1">Email</h4>
+                    <a
+                      href="mailto:aragac.arm@gmail.com"
+                      class="text-pastel-orange hover:text-golden transition-colors"
+                    >
+                      aragac.arm@gmail.com
+                    </a>
+                  </div>
+                </div>
+
+                <div class="flex items-start">
+                  <i
+                    class="fas fa-concierge-bell text-pastel-orange text-xl mr-4 mt-1"
+                  ></i>
+                  <div>
+                    <h4 class="font-semibold text-warm-brown mb-1">Usługi</h4>
+                    <p class="text-gray-700">Jedzenie na miejscu • Na wynos</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Social Media -->
+            <div class="mt-8 pt-8 border-t border-gray-200 text-center">
+              <h4 class="font-semibold text-warm-brown mb-4">
+                Śledź nas w mediach społecznościowych
+              </h4>
+              <div class="flex justify-center space-x-4">
+                <a
+                  href="https://www.facebook.com/profile.php?id=61563066510136"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="bg-pastel-orange hover:bg-golden text-white p-4 rounded-full transition-all hover:scale-110"
+                >
+                  <i class="fab fa-facebook-f text-2xl"></i>
+                </a>
+                <a
+                  href="https://www.instagram.com/aragac_arm"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="bg-pastel-orange hover:bg-golden text-white p-4 rounded-full transition-all hover:scale-110"
+                >
+                  <i class="fab fa-instagram text-2xl"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- CTA -->
+          <div
+            class="bg-gradient-to-r from-pastel-orange to-golden rounded-xl shadow-warm p-8 text-center text-white"
+          >
+            <h2 class="text-2xl md:text-3xl font-display font-bold mb-4">
+              Zapraszamy do odwiedzenia Aragac!
+            </h2>
+            <p class="text-lg mb-6">
+              Odkryj autentyczne smaki Armenii i Gruzji w sercu Kartuz
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+              <a
+                href="/#dania-prosto-z-ognia"
+                class="bg-white text-warm-brown px-8 py-3 rounded-lg font-semibold hover:shadow-xl transition-all"
+              >
+                <i class="fas fa-utensils mr-2"></i>
+                Zobacz menu
+              </a>
+              <a
+                href="tel:+48501839411"
+                class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-warm-brown transition-all"
+              >
+                <i class="fas fa-phone mr-2"></i>
+                Zadzwoń teraz
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-warm-brown text-white py-8 mt-12">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <p class="mb-4">
+          <a href="/" class="hover:text-pastel-orange transition-colors"
+            >Strona główna</a
+          >
+          <span class="mx-3">•</span>
+          <a href="/o-nas" class="hover:text-pastel-orange transition-colors"
+            >O nas</a
+          >
+          <span class="mx-3">•</span>
+          <a
+            href="https://aragac.pl"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hover:text-pastel-orange transition-colors"
+            >aragac.pl</a
+          >
+        </p>
+        <p class="text-gray-300 text-sm">
+          © {{ year }} Aragac - Kuchnia Ormiańsko-Gruzińska
+        </p>
+      </div>
+    </footer>
+
+    <!-- Scroll to top button -->
+    <button
+      onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
+      class="fixed bottom-6 right-6 bg-pastel-orange hover:bg-golden text-white p-3 rounded-full shadow-lg transition-all hover:scale-110 z-50"
+      title="Powrót do góry"
+    >
+      <i class="fas fa-arrow-up"></i>
+    </button>
+  </body>
+</html>

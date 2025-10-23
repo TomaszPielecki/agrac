@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aragac - Panel Administracyjny</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- React CDN -->
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.production.min.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
+    ></script>
+
+    <!-- Babel dla JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Font Awesome dla ikon -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind Config -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "warm-beige": "#F5F5DC",
+              "warm-brown": "#8B7355",
+              "pastel-orange": "#E6B17A",
+              golden: "#D4A574",
+              "soft-white": "#FEFEFE",
+            },
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Custom Styles -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='assets/css/main.css') }}"
+    />
+
+    <style>
+      .fade-in {
+        animation: fadeIn 0.5s ease-in;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .slide-in {
+        animation: slideIn 0.3s ease-out;
+      }
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 font-sans">
+    <div id="admin-root"></div>
+
+    <script type="text/babel">
+      const { useState, useEffect } = React;
+
+      // Komponent główny dashboardu
+      const AdminDashboard = () => {
+        const [activeTab, setActiveTab] = useState("menu");
+        const [isLoading, setIsLoading] = useState(false);
+
+        return (
+          <div className="min-h-screen bg-gray-50">
+            {/* Header */}
+            <header className="bg-white shadow-sm border-b">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex justify-between items-center h-16">
+                  <div className="flex items-center">
+                    <h1 className="text-2xl font-bold text-warm-brown">
+                      <i className="fas fa-utensils mr-2"></i>
+                      Aragac Admin
+                    </h1>
+                  </div>
+                  <div className="flex items-center space-x-4">
+                    <a
+                      href="/"
+                      className="text-gray-600 hover:text-warm-brown transition-colors"
+                      title="Powrót do strony głównej"
+                    >
+                      <i className="fas fa-home text-xl"></i>
+                    </a>
+                    <div className="text-sm text-gray-500">
+                      Panel Administracyjny
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </header>
+
+            {/* Navigation Tabs */}
+            <nav className="bg-white border-b">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex space-x-8">
+                  <TabButton
+                    id="menu"
+                    label="Menu"
+                    icon="fas fa-utensils"
+                    active={activeTab === "menu"}
+                    onClick={() => setActiveTab("menu")}
+                  />
+                  <TabButton
+                    id="messages"
+                    label="Wiadomości"
+                    icon="fas fa-envelope"
+                    active={activeTab === "messages"}
+                    onClick={() => setActiveTab("messages")}
+                  />
+                  <TabButton
+                    id="settings"
+                    label="Ustawienia"
+                    icon="fas fa-cog"
+                    active={activeTab === "settings"}
+                    onClick={() => setActiveTab("settings")}
+                  />
+                </div>
+              </div>
+            </nav>
+
+            {/* Content */}
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+              {activeTab === "menu" && <MenuManager />}
+              {activeTab === "messages" && <MessagesManager />}
+              {activeTab === "settings" && <SettingsManager />}
+            </main>
+          </div>
+        );
+      };
+
+      // Komponent przycisku taba
+      const TabButton = ({ id, label, icon, active, onClick }) => (
+        <button
+          onClick={onClick}
+          className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+            active
+              ? "border-pastel-orange text-pastel-orange"
+              : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+          }`}
+        >
+          <i className={`${icon} mr-2`}></i>
+          {label}
+        </button>
+      );
+
+      // Manager menu
+      const MenuManager = () => {
+        const [items, setItems] = useState([]);
+        const [categories, setCategories] = useState([]);
+        const [selectedCategory, setSelectedCategory] = useState("");
+        const [isLoading, setIsLoading] = useState(true);
+        const [showAddForm, setShowAddForm] = useState(false);
+        const [editingItem, setEditingItem] = useState(null);
+
+        useEffect(() => {
+          loadData();
+        }, [selectedCategory]);
+
+        const loadData = async () => {
+          try {
+            setIsLoading(true);
+
+            // Pobierz kategorie
+            const categoriesResponse = await fetch("/api/admin/categories");
+            const categoriesData = await categoriesResponse.json();
+            setCategories(categoriesData);
+
+            // Pobierz dania
+            const itemsUrl = selectedCategory
+              ? `/api/admin/menu-items?category_id=${selectedCategory}`
+              : "/api/admin/menu-items";
+            const itemsResponse = await fetch(itemsUrl);
+            const itemsData = await itemsResponse.json();
+            setItems(itemsData);
+          } catch (error) {
+            console.error("Błąd ładowania danych:", error);
+          } finally {
+            setIsLoading(false);
+          }
+        };
+
+        const deleteItem = async (itemId) => {
+          if (!confirm("Czy na pewno chcesz usunąć to danie?")) return;
+
+          try {
+            const response = await fetch(`/api/admin/menu-items/${itemId}`, {
+              method: "DELETE",
+            });
+
+            if (response.ok) {
+              loadData();
+              alert("Danie zostało usunięte");
+            } else {
+              alert("Błąd podczas usuwania");
+            }
+          } catch (error) {
+            console.error("Błąd:", error);
+            alert("Błąd podczas usuwania");
+          }
+        };
+
+        return (
+          <div className="fade-in">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">
+                Zarządzanie Menu
+              </h2>
+              <button
+                onClick={() => setShowAddForm(true)}
+                className="bg-pastel-orange hover:bg-golden text-white px-4 py-2 rounded-lg transition-colors"
+              >
+                <i className="fas fa-plus mr-2"></i>
+                Dodaj danie
+              </button>
+            </div>
+
+            {/* Filtr kategorii */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Filtruj po kategorii:
+              </label>
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="w-48 px-3 py-2 border border-gray-300 rounded-md focus:ring-pastel-orange focus:border-pastel-orange"
+              >
+                <option value="">Wszystkie kategorie</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Lista dań */}
+            {isLoading ? (
+              <div className="text-center py-8">
+                <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-pastel-orange"></div>
+                <p className="mt-2 text-gray-600">Ładowanie...</p>
+              </div>
+            ) : (
+              <div className="bg-white shadow rounded-lg overflow-hidden">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Nazwa
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Kategoria
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Cena
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Status
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Akcje
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {items.map((item) => (
+                      <tr key={item.id}>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            <img
+                              src={
+                                item.image_url || "/api/static/placeholder.jpg"
+                              }
+                              alt={item.name}
+                              className="h-10 w-10 rounded-full object-cover mr-3"
+                              onError={(e) => {
+                                e.target.src =
+                                  "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIGZpbGw9IiNGNUY1REMiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1zaXplPSIxMiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iIGZpbGw9IiM4QjczNTUiPk5PIElNRzwvdGV4dD48L3N2Zz4=";
+                              }}
+                            />
+                            <div>
+                              <div className="text-sm font-medium text-gray-900">
+                                {item.name}
+                              </div>
+                              <div className="text-sm text-gray-500 truncate max-w-xs">
+                                {item.description}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {item.category_name}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {item.price} zł
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span
+                            className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                              item.is_available
+                                ? "bg-green-100 text-green-800"
+                                : "bg-red-100 text-red-800"
+                            }`}
+                          >
+                            {item.is_available ? "Dostępne" : "Niedostępne"}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                          <button
+                            onClick={() => setEditingItem(item)}
+                            className="text-pastel-orange hover:text-golden"
+                          >
+                            <i className="fas fa-edit"></i>
+                          </button>
+                          <button
+                            onClick={() => deleteItem(item.id)}
+                            className="text-red-600 hover:text-red-900"
+                          >
+                            <i className="fas fa-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {/* Formularz dodawania/edycji */}
+            {(showAddForm || editingItem) && (
+              <MenuItemForm
+                item={editingItem}
+                categories={categories}
+                onSave={() => {
+                  setShowAddForm(false);
+                  setEditingItem(null);
+                  loadData();
+                }}
+                onCancel={() => {
+                  setShowAddForm(false);
+                  setEditingItem(null);
+                }}
+              />
+            )}
+          </div>
+        );
+      };
+
+      // Formularz dania
+      const MenuItemForm = ({ item, categories, onSave, onCancel }) => {
+        const [formData, setFormData] = useState({
+          name: item?.name || "",
+          description: item?.description || "",
+          price: item?.price || "",
+          category_id: item?.category_id || "",
+          image_url: item?.image_url || "",
+          ingredients: item?.ingredients || "",
+          allergens: item?.allergens || "",
+          is_vegetarian: item?.is_vegetarian || false,
+          is_vegan: item?.is_vegan || false,
+          is_gluten_free: item?.is_gluten_free || false,
+          is_spicy: item?.is_spicy || false,
+          is_popular: item?.is_popular || false,
+          is_available:
+            item?.is_available !== undefined ? item.is_available : true,
+          order_index: item?.order_index || 0,
+        });
+
+        const [isSubmitting, setIsSubmitting] = useState(false);
+
+        const handleSubmit = async (e) => {
+          e.preventDefault();
+          setIsSubmitting(true);
+
+          try {
+            const url = item
+              ? `/api/admin/menu-items/${item.id}`
+              : "/api/admin/menu-items";
+
+            const method = item ? "PUT" : "POST";
+
+            const response = await fetch(url, {
+              method,
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+              alert(
+                item ? "Danie zostało zaktualizowane" : "Danie zostało dodane"
+              );
+              onSave();
+            } else {
+              const error = await response.json();
+              alert(`Błąd: ${error.error}`);
+            }
+          } catch (error) {
+            console.error("Błąd:", error);
+            alert("Błąd podczas zapisywania");
+          } finally {
+            setIsSubmitting(false);
+          }
+        };
+
+        return (
+          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto slide-in">
+              <div className="p-6">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-lg font-medium text-gray-900">
+                    {item ? "Edytuj danie" : "Dodaj nowe danie"}
+                  </h3>
+                  <button
+                    onClick={onCancel}
+                    className="text-gray-400 hover:text-gray-600"
+                  >
+                    <i className="fas fa-times text-xl"></i>
+                  </button>
+                </div>
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Nazwa *
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.name}
+                        onChange={(e) =>
+                          setFormData({ ...formData, name: e.target.value })
+                        }
+                        required
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-pastel-orange focus:border-pastel-orange"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Kategoria *
+                      </label>
+                      <select
+                        value={formData.category_id}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            category_id: e.target.value,
+                          })
+                        }
+                        required
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-pastel-orange focus:border-pastel-orange"
+                      >
+                        <option value="">Wybierz kategorię</option>
+                        {categories.map((cat) => (
+                          <option key={cat.id} value={cat.id}>
+                            {cat.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Opis *
+                    </label>
+                    <textarea
+                      value={formData.description}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          description: e.target.value,
+                        })
+                      }
+                      required
+                      rows="3"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-pastel-orange focus:border-pastel-orange"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Cena (zł) *
+                      </label>
+                      <input
+                        type="number"
+                        step="0.01"
+                        value={formData.price}
+                        onChange={(e) =>
+                          setFormData({ ...formData, price: e.target.value })
+                        }
+                        required
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-pastel-orange focus:border-pastel-orange"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        URL obrazka
+                      </label>
+                      <input
+                        type="url"
+                        value={formData.image_url}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            image_url: e.target.value,
+                          })
+                        }
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-pastel-orange focus:border-pastel-orange"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Składniki
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.ingredients}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            ingredients: e.target.value,
+                          })
+                        }
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-pastel-orange focus:border-pastel-orange"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Alergeny
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.allergens}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            allergens: e.target.value,
+                          })
+                        }
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-pastel-orange focus:border-pastel-orange"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Checkboxy */}
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {[
+                      { key: "is_vegetarian", label: "Wegetariańskie" },
+                      { key: "is_vegan", label: "Wegańskie" },
+                      { key: "is_gluten_free", label: "Bezglutenowe" },
+                      { key: "is_spicy", label: "Ostre" },
+                      { key: "is_popular", label: "Popularne" },
+                      { key: "is_available", label: "Dostępne" },
+                    ].map(({ key, label }) => (
+                      <div key={key} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={formData[key]}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              [key]: e.target.checked,
+                            })
+                          }
+                          className="h-4 w-4 text-pastel-orange focus:ring-pastel-orange border-gray-300 rounded"
+                        />
+                        <label className="ml-2 text-sm text-gray-700">
+                          {label}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="flex justify-end space-x-3 pt-4">
+                    <button
+                      type="button"
+                      onClick={onCancel}
+                      className="px-4 py-2 text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors"
+                    >
+                      Anuluj
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="px-4 py-2 bg-pastel-orange hover:bg-golden text-white rounded-md transition-colors disabled:opacity-50"
+                    >
+                      {isSubmitting ? "Zapisywanie..." : "Zapisz"}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        );
+      };
+
+      // Manager wiadomości (placeholder)
+      const MessagesManager = () => {
+        const [messages, setMessages] = useState([]);
+        const [isLoading, setIsLoading] = useState(true);
+
+        useEffect(() => {
+          loadMessages();
+        }, []);
+
+        const loadMessages = async () => {
+          try {
+            const response = await fetch("/api/admin/messages");
+            const data = await response.json();
+            setMessages(data);
+          } catch (error) {
+            console.error("Błąd ładowania wiadomości:", error);
+          } finally {
+            setIsLoading(false);
+          }
+        };
+
+        const markAsRead = async (messageId) => {
+          try {
+            await fetch(`/api/admin/messages/${messageId}/read`, {
+              method: "PUT",
+            });
+            loadMessages();
+          } catch (error) {
+            console.error("Błąd oznaczania wiadomości:", error);
+          }
+        };
+
+        return (
+          <div className="fade-in">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+              Wiadomości kontaktowe
+            </h2>
+
+            {isLoading ? (
+              <div className="text-center py-8">
+                <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-pastel-orange"></div>
+                <p className="mt-2 text-gray-600">Ładowanie...</p>
+              </div>
+            ) : messages.length === 0 ? (
+              <div className="text-center py-8">
+                <i className="fas fa-inbox text-4xl text-gray-400 mb-4"></i>
+                <p className="text-gray-600">Brak wiadomości</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {messages.map((message) => (
+                  <div
+                    key={message.id}
+                    className={`bg-white p-6 rounded-lg shadow ${
+                      !message.is_read ? "border-l-4 border-pastel-orange" : ""
+                    }`}
+                  >
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <h3 className="text-lg font-medium text-gray-900">
+                          {message.name}
+                        </h3>
+                        <p className="text-sm text-gray-600">
+                          {message.email}{" "}
+                          {message.phone && `• ${message.phone}`}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {new Date(message.created_at).toLocaleString("pl-PL")}
+                        </p>
+                      </div>
+                      {!message.is_read && (
+                        <button
+                          onClick={() => markAsRead(message.id)}
+                          className="bg-pastel-orange hover:bg-golden text-white px-3 py-1 text-sm rounded"
+                        >
+                          Oznacz jako przeczytane
+                        </button>
+                      )}
+                    </div>
+                    <p className="text-gray-700 whitespace-pre-wrap">
+                      {message.message}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      };
+
+      // Manager ustawień (placeholder)
+      const SettingsManager = () => {
+        const [settings, setSettings] = useState({});
+        const [isLoading, setIsLoading] = useState(true);
+        const [isSaving, setIsSaving] = useState(false);
+
+        useEffect(() => {
+          loadSettings();
+        }, []);
+
+        const loadSettings = async () => {
+          try {
+            const response = await fetch("/api/admin/settings");
+            const data = await response.json();
+            setSettings(data);
+          } catch (error) {
+            console.error("Błąd ładowania ustawień:", error);
+          } finally {
+            setIsLoading(false);
+          }
+        };
+
+        const saveSettings = async () => {
+          setIsSaving(true);
+          try {
+            const response = await fetch("/api/admin/settings", {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(settings),
+            });
+
+            if (response.ok) {
+              alert("Ustawienia zostały zapisane");
+            } else {
+              alert("Błąd podczas zapisywania");
+            }
+          } catch (error) {
+            console.error("Błąd:", error);
+            alert("Błąd podczas zapisywania");
+          } finally {
+            setIsSaving(false);
+          }
+        };
+
+        if (isLoading) {
+          return (
+            <div className="text-center py-8">
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-pastel-orange"></div>
+              <p className="mt-2 text-gray-600">Ładowanie...</p>
+            </div>
+          );
+        }
+
+        return (
+          <div className="fade-in max-w-2xl">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">
+                Ustawienia strony
+              </h2>
+              <button
+                onClick={saveSettings}
+                disabled={isSaving}
+                className="bg-pastel-orange hover:bg-golden text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
+              >
+                {isSaving ? "Zapisywanie..." : "Zapisz zmiany"}
+              </button>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow space-y-6">
+              {/* Ustawienia strony */}
+              <div>
+                <h3 className="text-lg font-medium text-gray-900 mb-4">
+                  Informacje o stronie
+                </h3>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Tytuł strony
+                    </label>
+                    <input
+                      type="text"
+                      value={settings.site_title || ""}
+                      onChange={(e) =>
+                        setSettings({ ...settings, site_title: e.target.value })
+                      }
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-pastel-orange focus:border-pastel-orange"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Podtytuł
+                    </label>
+                    <input
+                      type="text"
+                      value={settings.site_subtitle || ""}
+                      onChange={(e) =>
+                        setSettings({
+                          ...settings,
+                          site_subtitle: e.target.value,
+                        })
+                      }
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-pastel-orange focus:border-pastel-orange"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Opis
+                    </label>
+                    <textarea
+                      value={settings.site_description || ""}
+                      onChange={(e) =>
+                        setSettings({
+                          ...settings,
+                          site_description: e.target.value,
+                        })
+                      }
+                      rows="3"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-pastel-orange focus:border-pastel-orange"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Dane kontaktowe */}
+              <div>
+                <h3 className="text-lg font-medium text-gray-900 mb-4">
+                  Dane kontaktowe
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Nazwa restauracji
+                    </label>
+                    <input
+                      type="text"
+                      value={settings.restaurant_name || ""}
+                      onChange={(e) =>
+                        setSettings({
+                          ...settings,
+                          restaurant_name: e.target.value,
+                        })
+                      }
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-pastel-orange focus:border-pastel-orange"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Telefon
+                    </label>
+                    <input
+                      type="text"
+                      value={settings.restaurant_phone || ""}
+                      onChange={(e) =>
+                        setSettings({
+                          ...settings,
+                          restaurant_phone: e.target.value,
+                        })
+                      }
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-pastel-orange focus:border-pastel-orange"
+                    />
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Adres
+                    </label>
+                    <input
+                      type="text"
+                      value={settings.restaurant_address || ""}
+                      onChange={(e) =>
+                        setSettings({
+                          ...settings,
+                          restaurant_address: e.target.value,
+                        })
+                      }
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-pastel-orange focus:border-pastel-orange"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      value={settings.restaurant_email || ""}
+                      onChange={(e) =>
+                        setSettings({
+                          ...settings,
+                          restaurant_email: e.target.value,
+                        })
+                      }
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-pastel-orange focus:border-pastel-orange"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Godziny otwarcia */}
+              <div>
+                <h3 className="text-lg font-medium text-gray-900 mb-4">
+                  Godziny otwarcia
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Poniedziałek - Czwartek
+                    </label>
+                    <input
+                      type="text"
+                      value={settings.hours_mon_thu || ""}
+                      onChange={(e) =>
+                        setSettings({
+                          ...settings,
+                          hours_mon_thu: e.target.value,
+                        })
+                      }
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-pastel-orange focus:border-pastel-orange"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Piątek - Sobota
+                    </label>
+                    <input
+                      type="text"
+                      value={settings.hours_fri_sat || ""}
+                      onChange={(e) =>
+                        setSettings({
+                          ...settings,
+                          hours_fri_sat: e.target.value,
+                        })
+                      }
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-pastel-orange focus:border-pastel-orange"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Niedziela
+                    </label>
+                    <input
+                      type="text"
+                      value={settings.hours_sun || ""}
+                      onChange={(e) =>
+                        setSettings({ ...settings, hours_sun: e.target.value })
+                      }
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-pastel-orange focus:border-pastel-orange"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Social media */}
+              <div>
+                <h3 className="text-lg font-medium text-gray-900 mb-4">
+                  Social Media
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Facebook URL
+                    </label>
+                    <input
+                      type="url"
+                      value={settings.facebook_url || ""}
+                      onChange={(e) =>
+                        setSettings({
+                          ...settings,
+                          facebook_url: e.target.value,
+                        })
+                      }
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-pastel-orange focus:border-pastel-orange"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Instagram URL
+                    </label>
+                    <input
+                      type="url"
+                      value={settings.instagram_url || ""}
+                      onChange={(e) =>
+                        setSettings({
+                          ...settings,
+                          instagram_url: e.target.value,
+                        })
+                      }
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-pastel-orange focus:border-pastel-orange"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      };
+
+      // Renderowanie aplikacji
+      const root = ReactDOM.createRoot(document.getElementById("admin-root"));
+      root.render(<AdminDashboard />);
+    </script>
+  </body>
+</html>

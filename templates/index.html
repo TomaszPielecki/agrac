@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- SEO Meta Tags -->
+    <title>Aragac Kartuzy - Kuchnia Ormiańsko-Gruzińska | ☎ 501 839 411</title>
+    <meta
+      name="description"
+      content="Restauracja Aragac w Kartuzach ✓ Autentyczna kuchnia ormiańska i gruzińska ✓ Khinkali, szaszłyk, wypieki ✓ Na miejscu i na wynos ☎ 501 839 411"
+    />
+    <meta
+      name="keywords"
+      content="Aragac Kartuzy, restauracja ormiańska, kuchnia gruzińska, khinkali Kartuzy, dolma, szaszłyk, kuchnia kaukaska, wypieki, jedzenie na wynos Kartuzy, Kościuszki 27"
+    />
+    <meta name="author" content="Restauracja Aragac" />
+    <meta name="geo.region" content="PL-22" />
+    <meta name="geo.placename" content="Kartuzy" />
+    <meta name="geo.position" content="54.3383;18.1941" />
+    <meta name="ICBM" content="54.3383, 18.1941" />
+
+    <!-- Mobile & App Tags -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="Aragac" />
+    <meta name="theme-color" content="#E6B17A" />
+    <meta name="msapplication-TileColor" content="#E6B17A" />
+
+    <!-- Search Engine Tags -->
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="bingbot" content="index, follow" />
+    <meta name="revisit-after" content="7 days" />
+    <meta name="rating" content="general" />
+    <meta name="distribution" content="global" />
+    <meta name="language" content="Polish" />
+    <link rel="canonical" href="https://aragac.pl/" />
+    <link rel="alternate" hreflang="pl" href="https://aragac.pl/" />
+    <link rel="alternate" hreflang="x-default" href="https://aragac.pl/" />
+
+    <!-- Favicon & PWA Manifest -->
+    <link
+      rel="icon"
+      type="image/jpeg"
+      href="{{ url_for('static', filename='assets/images/logo.jpg') }}"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="{{ url_for('static', filename='assets/images/logo.jpg') }}"
+    />
+    <link
+      rel="shortcut icon"
+      href="{{ url_for('static', filename='assets/images/logo.jpg') }}"
+    />
+    <link
+      rel="manifest"
+      href="{{ url_for('static', filename='manifest.json') }}"
+    />
+
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+    <link rel="dns-prefetch" href="https://unpkg.com" />
+    <link rel="dns-prefetch" href="https://cdn.tailwindcss.com" />
+
+    <!-- Open Graph Meta Tags (Facebook, LinkedIn) -->
+    <meta property="og:locale" content="pl_PL" />
+    <meta property="og:type" content="restaurant.restaurant" />
+    <meta
+      property="og:title"
+      content="Aragac Kartuzy - Kuchnia Ormiańsko-Gruzińska"
+    />
+    <meta
+      property="og:description"
+      content="Autentyczna kuchnia kaukaska w Kartuzach ✓ Khinkali, szaszłyk, wypieki ✓ Na miejscu i na wynos ☎ 501 839 411"
+    />
+    <meta property="og:url" content="https://aragac.pl/" />
+    <meta property="og:site_name" content="Aragac" />
+    <meta
+      property="og:image"
+      content="https://aragac.pl/static/assets/images/banner.jpg"
+    />
+    <meta
+      property="og:image:alt"
+      content="Restauracja Aragac - Kuchnia Ormiańsko-Gruzińska w Kartuzach"
+    />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="restaurant:contact_info:street_address"
+      content="ul. Kościuszki 27"
+    />
+    <meta property="restaurant:contact_info:locality" content="Kartuzy" />
+    <meta property="restaurant:contact_info:postal_code" content="83-300" />
+    <meta property="restaurant:contact_info:country_name" content="Poland" />
+    <meta
+      property="restaurant:contact_info:phone_number"
+      content="+48501839411"
+    />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Aragac Kartuzy - Kuchnia Ormiańsko-Gruzińska"
+    />
+    <meta
+      name="twitter:description"
+      content="Autentyczna kuchnia kaukaska ✓ Khinkali, szaszłyk, wypieki ☎ 501 839 411"
+    />
+    <meta
+      name="twitter:image"
+      content="https://aragac.pl/static/assets/images/banner.jpg"
+    />
+    <meta name="twitter:image:alt" content="Restauracja Aragac w Kartuzach" />
+
+    <!-- Structured Data - Schema.org (Restaurant) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Restaurant",
+        "@id": "https://aragac.pl/#restaurant",
+        "name": "Aragac",
+        "alternateName": "Restauracja Aragac",
+        "image": [
+          "https://aragac.pl/static/assets/images/logo.jpg",
+          "https://aragac.pl/static/assets/images/banner.jpg",
+          "https://aragac.pl/static/assets/images/daniaZOgnia.jpg"
+        ],
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://aragac.pl/static/assets/images/logo.jpg",
+          "width": 200,
+          "height": 200
+        },
+        "description": "Restauracja kuchni ormiańsko-gruzińskiej w Kartuzach. Autentyczne smaki Kaukazu - jedzenie na miejscu i na wynos.",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "ul. Kościuszki 27",
+          "addressLocality": "Kartuzy",
+          "addressRegion": "Pomorskie",
+          "postalCode": "83-300",
+          "addressCountry": "PL"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": "54.3383",
+          "longitude": "18.1941"
+        },
+        "telephone": "+48501839411",
+        "email": "aragac.arm@gmail.com",
+        "url": "https://aragac.pl",
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": [
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday",
+              "Sunday"
+            ],
+            "opens": "10:00",
+            "closes": "21:00"
+          }
+        ],
+        "priceRange": "$$",
+        "servesCuisine": [
+          "Armenian",
+          "Georgian",
+          "Caucasian",
+          "Kuchnia ormiańska",
+          "Kuchnia gruzińska"
+        ],
+        "acceptsReservations": true,
+        "hasMenu": {
+          "@type": "Menu",
+          "url": "https://aragac.pl/#menu",
+          "hasMenuSection": [
+            {
+              "@type": "MenuSection",
+              "name": "Dania prosto z ognia",
+              "description": "Aromatyczne mięsa i warzywa grillowane na węglu"
+            },
+            {
+              "@type": "MenuSection",
+              "name": "Wypieki",
+              "description": "Świeże pieczywo i tradycyjne wypieki"
+            },
+            {
+              "@type": "MenuSection",
+              "name": "Khinkali i Tolma",
+              "description": "Tradycyjne gruzińskie pierożki i dania"
+            }
+          ]
+        },
+        "paymentAccepted": "Cash, Credit Card",
+        "currenciesAccepted": "PLN",
+        "areaServed": {
+          "@type": "City",
+          "name": "Kartuzy"
+        },
+        "sameAs": [
+          "https://www.facebook.com/profile.php?id=61563066510136",
+          "https://www.instagram.com/aragac_arm"
+        ]
+      }
+    </script>
+
+    <!-- BreadcrumbList Schema -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Strona główna",
+            "item": "https://aragac.pl/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Menu",
+            "item": "https://aragac.pl/#menu"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "O nas",
+            "item": "https://aragac.pl/o-nas"
+          }
+        ]
+      }
+    </script>
+
+    <!-- Security Headers (CSP will be set via Flask) -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN" />
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- React CDN -->
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.production.min.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
+    ></script>
+
+    <!-- Babel dla JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Font Awesome dla ikon -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Custom CSS -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='assets/css/main.css') }}"
+    />
+
+    <!-- Tailwind Config -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "warm-beige": "#F5F5DC",
+              "warm-brown": "#8B7355",
+              "pastel-orange": "#E6B17A",
+              golden: "#D4A574",
+              "soft-white": "#FEFEFE",
+            },
+            fontFamily: {
+              display: ["Playfair Display", "serif"],
+              body: ["Inter", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="font-body bg-soft-white">
+    <div id="root"></div>
+
+    <!-- React Components -->
+    <script
+      type="text/babel"
+      src="{{ url_for('static', filename='assets/js/components/Header.js') }}"
+    ></script>
+    <script
+      type="text/babel"
+      src="{{ url_for('static', filename='assets/js/components/Hero.js') }}"
+    ></script>
+    <script
+      type="text/babel"
+      src="{{ url_for('static', filename='assets/js/components/PromotionsSection.js') }}"
+    ></script>
+    <script
+      type="text/babel"
+      src="{{ url_for('static', filename='assets/js/components/MenuSection.js') }}"
+    ></script>
+    <script
+      type="text/babel"
+      src="{{ url_for('static', filename='assets/js/components/GallerySection.js') }}"
+    ></script>
+    <script
+      type="text/babel"
+      src="{{ url_for('static', filename='assets/js/components/ContactForm.js') }}"
+    ></script>
+    <script
+      type="text/babel"
+      src="{{ url_for('static', filename='assets/js/components/Footer.js') }}"
+    ></script>
+
+    <!-- Main JavaScript -->
+    <script src="{{ url_for('static', filename='assets/js/main.js') }}"></script>
+
+    <!-- Main App -->
+    <script
+      type="text/babel"
+      src="{{ url_for('static', filename='assets/js/app.js') }}"
+    ></script>
+  </body>
+</html>

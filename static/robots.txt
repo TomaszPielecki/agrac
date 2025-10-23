@@ -1,0 +1,13 @@
+# robots.txt dla Restauracji Aragac
+# https://aragac.pl/robots.txt
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://aragac.pl/sitemap.xml
+
+# Crawl-delay dla botów
+Crawl-delay: 1

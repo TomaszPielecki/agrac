@@ -1,0 +1,47 @@
+# Pliki do ignorowania
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Środowisko wirtualne
+venv/
+env/
+ENV/
+
+# Konfiguracja środowiska
+.env
+.env.local
+.env.production
+
+# Logi
+*.log
+logs/
+
+# Baza danych
+*.db
+*.sqlite
+*.sqlite3
+
+# Pliki tymczasowe
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Uploads
+uploads/
+static/uploads/
+
+# Node modules (gdyby były potrzebne)
+node_modules/
+
+# Cache
+.cache/
+.pytest_cache/

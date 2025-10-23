@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- SEO Meta Tags -->
+    <title>
+      {{ title }} - Menu Aragac Kartuzy | Kuchnia Ormiańsko-Gruzińska
+    </title>
+    <meta
+      name="description"
+      content="Zobacz menu: {{ title }} w restauracji Aragac Kartuzy ✓ Autentyczna kuchnia ormiańsko-gruzińska ✓ Tradycyjne dania ✓ Na miejscu i na wynos ☎ 501 839 411"
+    />
+    <meta
+      name="keywords"
+      content="{{ title }}, menu Aragac, restauracja ormiańska Kartuzy, kuchnia gruzińska, jedzenie na wynos"
+    />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://aragac.pl/menu/{{ slug }}" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="{{ title }} - Menu Aragac" />
+    <meta
+      property="og:description"
+      content="Zobacz menu {{ title }} w restauracji Aragac Kartuzy"
+    />
+    <meta property="og:url" content="https://aragac.pl/menu/{{ slug }}" />
+    <meta property="og:image" content="https://aragac.pl{{ image }}" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{ title }} - Menu Aragac" />
+    <meta name="twitter:description" content="Zobacz menu {{ title }}" />
+    <meta name="twitter:image" content="https://aragac.pl{{ image }}" />
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Custom CSS -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='assets/css/main.css') }}"
+    />
+
+    <!-- Tailwind Config -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "warm-beige": "#F5F5DC",
+              "warm-brown": "#8B7355",
+              "pastel-orange": "#E6B17A",
+              golden: "#D4A574",
+              "soft-white": "#FEFEFE",
+            },
+            fontFamily: {
+              display: ["Playfair Display", "serif"],
+              body: ["Inter", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      .menu-image-container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .menu-image {
+        width: 100%;
+        height: auto;
+        display: block;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      @media (max-width: 768px) {
+        .menu-image {
+          max-height: 80vh;
+          object-fit: contain;
+        }
+      }
+    </style>
+  </head>
+  <body class="font-body bg-soft-white">
+    <!-- Header -->
+    <header class="bg-soft-white shadow-warm sticky top-0 z-50">
+      <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <!-- Logo -->
+          <div class="flex-shrink-0">
+            <a href="/">
+              <img
+                src="{{ url_for('static', filename='assets/images/logo.jpg') }}"
+                alt="Aragac"
+                class="h-12 w-auto rounded-lg"
+              />
+            </a>
+          </div>
+
+          <!-- Back Button -->
+          <div>
+            <a
+              href="/"
+              class="text-warm-brown hover:text-pastel-orange transition-colors px-4 py-2 rounded-md font-medium inline-flex items-center"
+            >
+              <i class="fas fa-arrow-left mr-2"></i>
+              Powrót
+            </a>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Menu Content -->
+    <main class="py-8 md:py-12">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Title -->
+        <div class="text-center mb-8">
+          <h1
+            class="text-3xl md:text-5xl font-display font-bold text-warm-brown mb-4"
+          >
+            {{ title }}
+          </h1>
+          <div
+            class="w-24 h-1 bg-gradient-to-r from-pastel-orange to-golden mx-auto"
+          ></div>
+        </div>
+
+        <!-- Menu Image -->
+        <div class="menu-image-container fade-in">
+          <div
+            class="bg-white rounded-xl md:rounded-2xl shadow-warm overflow-hidden"
+          >
+            <img
+              src="{{ url_for('static', filename='assets/images/' + image) }}"
+              alt="{{ title }}"
+              class="menu-image"
+            />
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="text-center mt-8 space-y-4 md:space-y-0 md:space-x-4">
+            <a
+              href="{{ url_for('static', filename='assets/images/' + image) }}"
+              download="{{ image }}"
+              class="inline-flex items-center btn-primary text-white px-6 py-3 rounded-lg font-semibold hover:shadow-xl transition-all"
+            >
+              <i class="fas fa-download mr-2"></i>
+              Pobierz menu
+            </a>
+
+            <a
+              href="tel:501839411"
+              class="inline-flex items-center border-2 border-warm-brown text-warm-brown px-6 py-3 rounded-lg font-semibold hover:bg-warm-brown hover:text-white transition-all"
+            >
+              <i class="fas fa-phone mr-2"></i>
+              Zadzwoń: 501 839 411
+            </a>
+          </div>
+
+          <!-- Info Box -->
+          <div class="mt-8 bg-warm-beige rounded-xl p-6 text-center">
+            <h3 class="text-xl font-semibold text-warm-brown mb-3">
+              <i class="fas fa-info-circle mr-2"></i>
+              Informacje
+            </h3>
+            <p class="text-gray-700 mb-2">
+              <i class="fas fa-map-marker-alt text-pastel-orange mr-2"></i>
+              ul. Kościuszki 27, 83-300 Kartuzy
+            </p>
+            <p class="text-gray-700 mb-2">
+              <i class="fas fa-clock text-pastel-orange mr-2"></i>
+              Codziennie: 10:00 - 21:00
+            </p>
+            <p class="text-gray-700">
+              <i class="fas fa-concierge-bell text-pastel-orange mr-2"></i>
+              Jedzenie na miejscu • Na wynos
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-warm-brown text-white py-8 mt-12">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <p class="mb-4">
+          <a href="/" class="hover:text-pastel-orange transition-colors"
+            >Strona główna</a
+          >
+          <span class="mx-3">•</span>
+          <a
+            href="https://www.instagram.com/aragac_arm"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hover:text-pastel-orange transition-colors"
+          >
+            <i class="fab fa-instagram mr-1"></i> Instagram
+          </a>
+          <span class="mx-3">•</span>
+          <a
+            href="https://aragac.pl"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hover:text-pastel-orange transition-colors"
+            >aragac.pl</a
+          >
+        </p>
+        <p class="text-gray-300 text-sm">
+          © {{ year }} Aragac - Kuchnia Ormiańsko-Gruzińska
+        </p>
+      </div>
+    </footer>
+
+    <!-- Scroll to top button -->
+    <button
+      onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
+      class="fixed bottom-6 right-6 bg-pastel-orange hover:bg-golden text-white p-3 rounded-full shadow-lg transition-all hover:scale-110 z-50"
+      title="Powrót do góry"
+    >
+      <i class="fas fa-arrow-up"></i>
+    </button>
+  </body>
+</html>
